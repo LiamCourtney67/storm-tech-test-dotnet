@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
+using Storm.TechTask.Core.ProjectAggregate;
 using Storm.TechTask.Core.ProjectAggregate.Queries;
 using Storm.TechTask.SharedKernel.Interfaces;
 
@@ -33,7 +34,17 @@ namespace Storm.TechTask.Api.Endpoints.Project
                 return NotFound();
             }
 
-            var response = new ProjectDetailsDto(entity.Id, entity.Name, entity.Category, entity.Status);
+            var response = new ProjectDetailsDto(
+                entity.Id,
+                entity.Name,
+                entity.Category,
+                entity.Status,
+                entity.Items
+                    .OrderBy(i => i.Id)
+                    .Select(i => new ToDoItemDto(i.Id, i.Title, i.Description, i.IsDone))
+                    .ToList()
+            );
+
             return Ok(response);
         }
     }
