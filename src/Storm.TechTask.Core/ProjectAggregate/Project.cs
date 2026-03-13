@@ -87,7 +87,7 @@ namespace Storm.TechTask.Core.ProjectAggregate
 
         public void Close()
         {
-            this.Status = ProjectStatus.Paused;
+            this.Status = ProjectStatus.Closed;
         }
     }
 }

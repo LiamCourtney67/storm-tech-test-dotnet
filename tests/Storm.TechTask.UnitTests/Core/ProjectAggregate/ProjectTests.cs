@@ -65,12 +65,20 @@ namespace Storm.TechTask.UnitTests.Core.ProjectAggregate
             actual.ShouldHaveSameStateAs(expected);
         }
 
-        /* 
-        // Uncomment this block for Task 3 - Fix a bug 
+        // Task 3 - Fix a bug 
+        // Bug found: ProjectStatus is set to Paused instead of Closed when Close() is called.
         [Fact]
         public void ChangesStateWhenClosed()
         {
+            // Arrange
+            var actual = NewProject().Set(p => p.Status, ProjectStatus.Open).Build();
+            var expected = NewProject().BuildFrom(actual).Set(p => p.Status, ProjectStatus.Closed).Build();
+
+            // Act
+            actual.Close();
+
+            // Assert
+            actual.ShouldHaveSameStateAs(expected);
         }
-        */
     }
 }
