@@ -30,7 +30,7 @@ namespace Storm.TechTask.Api.IntegrationTests.Endpoints.Projects
             var response = await this.HttpClient.PostAsync($"/Projects", new CreateProject.Command("name", ProjectCategory.Development, true));
 
             // Assert
-            await response.ShouldBeSuccess().WithObjectPayload(new ProjectDto(await response.GetJsonIntProp("id"), "name"));
+            await response.ShouldBeCreated().WithObjectPayload(new ProjectDto(await response.GetJsonIntProp("id"), "name"));
             var expected = NewProject()
                 .Set(p => p.Id, await response.GetJsonIntProp("id"))
                 .Set(p => p.Name, "name")

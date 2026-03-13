@@ -39,6 +39,12 @@ namespace Storm.TechTask.Api.IntegrationTests.Endpoints
             return response;
         }
 
+        public static HttpResponseMessage ShouldBeCreated(this HttpResponseMessage response)
+        {
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            return response;
+        }
+
         public static HttpResponseMessage ShouldBeNotAuthenticated(this HttpResponseMessage response)
         {
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

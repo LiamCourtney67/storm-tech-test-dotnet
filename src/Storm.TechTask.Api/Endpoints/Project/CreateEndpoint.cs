@@ -18,6 +18,7 @@ namespace Storm.TechTask.Api.Endpoints.Project
         }
 
         [HttpPost("/Projects")]
+        [ProducesResponseType(typeof(ProjectDto), StatusCodes.Status201Created)]
         [SwaggerOperation(
             Summary = "Creates a new Project",
             Description = "Creates a new Project",
@@ -28,7 +29,7 @@ namespace Storm.TechTask.Api.Endpoints.Project
         {
             var project = await _mediator.Send(request, cancellationToken);
 
-            return Ok(new ProjectDto(project.Id, project.Name));
+            return Created($"/Projects/{project.Id}", new ProjectDto(project.Id, project.Name));
         }
     }
 }
