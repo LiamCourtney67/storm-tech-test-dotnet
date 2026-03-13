@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Ardalis.GuardClauses;
 
+using Storm.TechTask.Core.ProjectAggregate.Events;
 using Storm.TechTask.Core.ProjectAggregate.Services;
 using Storm.TechTask.SharedKernel.Entities;
 using Storm.TechTask.SharedKernel.Interfaces;
@@ -58,8 +59,8 @@ namespace Storm.TechTask.Core.ProjectAggregate
             var item = new ToDoItem(title, description, false);
             this.Items.Add(item);
 
-            //var newItemAddedEvent = new NewItemAddedEvent(this, item);
-            //Events.Add(newItemAddedEvent);
+            var newItemAddedEvent = new NewItemAddedEvent(this, item);
+            Events.Add(newItemAddedEvent);
 
             return item;
         }
@@ -67,8 +68,10 @@ namespace Storm.TechTask.Core.ProjectAggregate
         public ToDoItem CompleteItem(int itemId)
         {
             var item = Items.GetChildEntity(itemId);
-
             item.MarkComplete();
+
+            var itemCompletedEvent = new ItemCompletedEvent(this, item);
+            Events.Add(itemCompletedEvent);
 
             return item;
         }
