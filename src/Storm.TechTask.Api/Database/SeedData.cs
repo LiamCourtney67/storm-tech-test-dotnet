@@ -8,7 +8,6 @@ namespace Storm.TechTask.Api.Database
     public static class SeedData
     {
         public static readonly Project TestProject1 = new Project("Test Project", ProjectCategory.Development, false, ProjectStatus.Open);
-        /*
         public static readonly ToDoItem ToDoItem1 = new ToDoItem
         {
             Title = "Get Sample Working",
@@ -24,7 +23,6 @@ namespace Storm.TechTask.Api.Database
             Title = "Run and Review Tests",
             Description = "Make sure all the tests run and review what they are doing."
         };
-        */
 
         public static void Initialize(IHostEnvironment environment, IServiceProvider serviceProvider)
         {
@@ -45,26 +43,23 @@ namespace Storm.TechTask.Api.Database
 
         public static void PopulateTestData(AppDbContext dbContext)
         {
-            /*
             foreach (var item in dbContext.Set<ToDoItem>())
             {
                 dbContext.Remove(item);
             }
-            */
             foreach (var project in dbContext.Set<Project>())
             {
                 dbContext.Remove(project);
             }
             dbContext.SaveChanges();
 
-            /*
             if (TestProject1.Items.Count() == 0)
             {
                 TestProject1.AddItem(ToDoItem1.Title, ToDoItem1.Description);
                 TestProject1.AddItem(ToDoItem2.Title, ToDoItem2.Description);
                 TestProject1.AddItem(ToDoItem3.Title, ToDoItem3.Description);
             }
-            */
+
             dbContext.Add(TestProject1);
 
             dbContext.SaveChanges();
