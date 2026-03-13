@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Duende.IdentityModel;
 using Duende.IdentityModel.Client;
 
 using Storm.TechTask.Api.Endpoints.Project;
 using Storm.TechTask.Api.IntegrationTests.Utilities;
+using Storm.TechTask.Core.ProjectAggregate;
 using Storm.TechTask.SharedKernel.Authorization;
 
 using Xunit;
@@ -35,6 +37,32 @@ namespace Storm.TechTask.Api.IntegrationTests.Endpoints.Projects
 
             // Assert
             await response.ShouldBeSuccess().WithObjectPayload(new ProjectDto(project.Id, project.Name));
+        }
+
+        [Theory]
+        [AllRolesExcept(AppRole.SysAdmin)]
+        public async Task ReturnsProjectByIdWithItems(AppRole role)
+        {
+            // Arrange
+            var project = await NewProject().WithToDoItems().BuildAndPersist();
+            this.HttpClient.SetBearerToken(await this.TokenIssuer.GetNewToken(role));
+
+            // Act
+            var response = await this.HttpClient.GetAsync($"/Projects/{project.Id}");
+
+            // Assert
+            await response.ShouldBeSuccess().WithObjectPayload(
+                new ProjectDetailsDto(
+                    project.Id,
+                    project.Name,
+                    project.Category,
+                    project.Status,
+                    project.Items
+                        .OrderBy(i => i.Id)
+                        .Select(i => new ToDoItemDto(i.Id, i.Title, i.Description, i.IsDone))
+                        .ToList()
+                )
+            );
         }
 
         [Fact]
