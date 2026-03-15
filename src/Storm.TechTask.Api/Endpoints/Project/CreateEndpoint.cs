@@ -19,6 +19,9 @@ namespace Storm.TechTask.Api.Endpoints.Project
 
         [HttpPost("/Projects")]
         [ProducesResponseType(typeof(ProjectDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]     // May also return ValidationProblemDetails, ProblemDetails is returned for a BusinessRuleException 
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [SwaggerOperation(
             Summary = "Creates a new Project",
             Description = "Creates a new Project",

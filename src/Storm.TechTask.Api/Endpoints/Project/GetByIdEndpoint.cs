@@ -12,20 +12,24 @@ namespace Storm.TechTask.Api.Endpoints.Project
 {
     public class GetByIdEndpoint : BaseEndpoint
         .WithRequest<ProjectDetails.Query>
-        .WithResponse<ProjectDto>
+        .WithResponse<ProjectDetailsDto>
     {
         public GetByIdEndpoint(IMediator mediator, ILoggingService loggingService, ISecurityService securityService) : base(mediator, loggingService, securityService)
         {
         }
 
         [HttpGet("/Projects/{Id:int}")]
+        [ProducesResponseType(typeof(ProjectDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [SwaggerOperation(
             Summary = "Gets a single Project",
-            Description = "Gets a single Project by Id",
+            Description = "Gets a single Project by Id, including its ToDoItems.",
             OperationId = "Projects.GetById",
             Tags = new[] { "ProjectEndpoints" })
         ]
-        public override async Task<ActionResult<ProjectDto>> HandleAsync([FromRoute] ProjectDetails.Query request,
+        public override async Task<ActionResult<ProjectDetailsDto>> HandleAsync([FromRoute] ProjectDetails.Query request,
             CancellationToken cancellationToken)
         {
             var entity = await _mediator.Send(request, cancellationToken);

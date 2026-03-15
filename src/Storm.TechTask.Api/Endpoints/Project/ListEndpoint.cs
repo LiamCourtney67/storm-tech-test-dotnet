@@ -18,6 +18,9 @@ namespace Storm.TechTask.Api.Endpoints.Project
         }
 
         [HttpGet("/Projects")]
+        [ProducesResponseType(typeof(List<ProjectDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
         [SwaggerOperation(
             Summary = "Gets a list of all Projects",
             Description = "Gets a list of all Projects",
